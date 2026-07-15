@@ -1,0 +1,32 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+# JamesIves/github-pages-deploy-action pushes to gh-pages; the default GITHUB_TOKEN
+# is read-only for new repos, so grant write explicitly.
+permissions:
+  contents: write
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages # GitHub Pages serves /EdgeReg/ from this branch.
+          folder: dist # Vite build output (base: '/EdgeReg/').

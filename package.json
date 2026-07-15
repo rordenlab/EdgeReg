@@ -1,0 +1,26 @@
+{
+  "name": "edgereg",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "license": "BSD-2-Clause",
+  "description": "Rigid/affine MRI registration, entirely in the browser. No data leaves your machine. Reslices a moving image into a stationary template with niimath (BSD -allineate) + NiiVue.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "npm run build && node test/smoke.mjs"
+  },
+  "dependencies": {
+    "@niivue/dcm2niix": "^1.2.0",
+    "@niivue/niivue": "1.0.0-rc.9",
+    "gl-matrix": "^3.4.4"
+  },
+  "devDependencies": {
+    "@webgpu/types": "^0.1.52",
+    "playwright": "^1.57.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.2"
+  }
+}
