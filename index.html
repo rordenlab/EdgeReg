@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- empty favicon: suppress the browser's default /favicon.ico request (404) -->
+  <link rel="icon" href="data:," />
+  <title>EdgeReg — browser MRI registration</title>
+  <script type="module" crossorigin src="/EdgeReg/assets/index-8zemd3WT.js"></script>
+  <link rel="stylesheet" crossorigin href="/EdgeReg/assets/index-OhWUi9h3.css">
+</head>
+
+<body>
+  <header>
+    <div class="row">
+      <strong class="brand">EdgeReg</strong>
+      <label for="sliceType">View</label>
+      <select id="sliceType" title="Slice layout applied to all three panels">
+        <option value="0">Axial</option>
+        <option value="1">Coronal</option>
+        <option value="2">Sagittal</option>
+        <option value="4">Render</option>
+        <option value="3" selected>A+C+S+R</option>
+      </select>
+      <label class="check" title="Remove excess neck from an image of the brain (niimath -robustfov) before registration">
+        <input type="checkbox" id="robustfovCheck" /> Robust FOV
+      </label>
+      <span class="spacer"></span>
+      <button id="aboutBtn">About</button>
+    </div>
+  </header>
+
+  <main id="panels">
+    <!-- Column 1: moving image (native space) — a preset picker + drop target -->
+    <section class="panel" data-slot="moving">
+      <div class="panel-head">
+        <span class="caption">Moving</span>
+        <select id="movingSelect" title="Choose a predefined moving image"></select>
+        <button class="infoBtn" id="infoMoving" title="Image header details" aria-label="Moving header info">ⓘ</button>
+      </div>
+      <div class="panel-canvas"><canvas id="glMoving"></canvas></div>
+    </section>
+
+    <!-- Column 2: stationary / template image — a preset picker + drop target -->
+    <section class="panel" data-slot="stationary">
+      <div class="panel-head">
+        <span class="caption">Template (stationary)</span>
+        <select id="stationarySelect" title="Choose a predefined stationary/template image"></select>
+        <button class="infoBtn" id="infoStationary" title="Image header details" aria-label="Template header info">ⓘ</button>
+      </div>
+      <div class="panel-canvas"><canvas id="glStationary"></canvas></div>
+    </section>
+
+    <!-- Column 3: resliced moving image (output of registration) — not editable -->
+    <section class="panel" data-slot="resliced">
+      <div class="panel-head">
+        <span class="caption">Resliced (moving → template)</span>
+        <span class="spacer"></span>
+        <button id="saveBtn" disabled title="Save the resliced image">Save</button>
+        <button class="infoBtn" id="infoResliced" title="Image header details" aria-label="Resliced header info">ⓘ</button>
+      </div>
+      <div class="panel-canvas"><canvas id="glResliced"></canvas></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="statusbar">
+      <span class="statusleft">
+        <span class="drophint">Drag &amp; drop a NIfTI image or a DICOM folder onto the Moving or Template panel</span>
+        <span id="location"></span>
+      </span>
+      <span class="statusright">
+        <div id="loadingCircle" class="loading-circle"></div>
+        <label id="statusMsg" class="hidden"></label>
+      </span>
+    </div>
+  </footer>
+
+  <!-- Bound to whichever panel triggered a multi-series DICOM conversion -->
+  <select id="dicomPick" class="hidden" aria-label="Pick a converted NIfTI series"></select>
+
+  <dialog id="aboutDialog">
+    <form method="dialog">
+      <h3><a href="https://github.com/rordenlab/EdgeReg" target="_blank" rel="noopener">EdgeReg</a></h3>
+      <p>Rigid/affine MRI registration, <strong>entirely in your browser</strong> — no upload, no server.
+        Register a <em>moving</em> image to a <em>stationary</em> template and view the resliced result.</p>
+      <p>Registration runs
+        <a href="https://github.com/rordenlab/niimath" target="_blank" rel="noopener">niimath</a>'s
+        affine <code>-allineate</code> engine (<a href="https://afni.nimh.nih.gov/" target="_blank"
+          rel="noopener">3dAllineate</a>-style, BSD) in WebAssembly, computing the moving→stationary
+        transform and reslicing the moving image into template space:</p>
+      <pre>niimath moving [-robustfov] -allineate template -gz 0 resliced</pre>
+      <ul>
+        <li><strong>Moving</strong> (left) — the image being registered; native resolution.</li>
+        <li><strong>Template</strong> (middle, stationary) — the fixed reference.</li>
+        <li><strong>Resliced</strong> (right) — the moving image after registration, in template space.
+          The middle and right panels share crosshairs (bidirectional sync).</li>
+      </ul>
+      <p>Drag a NIfTI image (or a DICOM folder) onto the Moving or Template panel to replace it;
+        registration re-runs automatically. The <strong>Robust FOV</strong> checkbox crops the
+        moving image's neck/inferior slices (<code>-robustfov</code>) before registration.</p>
+      <p>Visualization uses <a href="https://niivue.com/" target="_blank" rel="noopener">NiiVue</a>;
+        DICOM import uses <a href="https://github.com/rordenlab/dcm2niix" target="_blank" rel="noopener">dcm2niix</a>.</p>
+      <p><small>Built on the BSD-2 build of
+        <a href="https://github.com/rordenlab/niimath" target="_blank" rel="noopener">niimath</a>, so this app is
+        licensed <strong>BSD-2-Clause</strong>. Requires a browser with WebGPU
+        (recent desktop Chrome, Edge, or Safari).</small></p>
+      <button autofocus value="default">Close</button>
+    </form>
+  </dialog>
+
+  <dialog id="infoDialog">
+    <form method="dialog">
+      <h3 id="infoTitle">Image header</h3>
+      <pre id="infoText"></pre>
+      <button autofocus value="default">Close</button>
+    </form>
+  </dialog>
+
+</body>
+
+</html>
