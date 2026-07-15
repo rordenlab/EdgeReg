@@ -2,7 +2,7 @@
 
 Rigid/affine MRI registration, **entirely in your browser** — no upload, no server. Register a *moving* image to a *stationary* template and inspect the resliced result side by side. Everything runs in WebAssembly + WebGPU on your machine, so your images are never shared with the cloud.
 
-Live demo: deploys as a GitHub Project Page at `https://<org>.github.io/EdgeReg/`.
+Live demo: [www.edgereg.org](https://www.edgereg.org/) (GitHub Pages, custom domain).
 
 > EdgeReg is a sibling of [**deface**](https://github.com/niivue/deface) (browser facial anonymization); the two share the same niimath + NiiVue foundations but are separate tools.
 

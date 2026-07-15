@@ -28,5 +28,5 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages # GitHub Pages serves /EdgeReg/ from this branch.
-          folder: dist # Vite build output (base: '/EdgeReg/').
+          branch: gh-pages # GitHub Pages serves the site from this branch.
+          folder: dist # Vite build output (base: '/'); dist/CNAME sets the custom domain.

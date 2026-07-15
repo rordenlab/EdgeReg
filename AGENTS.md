@@ -82,7 +82,7 @@ Because niimath is plain app source (not a node_module), Vite/Rollup emit its `n
 
 ## Deploy
 
-Push to `main` builds + deploys to `gh-pages` (`.github/workflows/ghpages.yml`), served at `https://<org>.github.io/EdgeReg/`. The `/EdgeReg/` subpath is baked in via `base: '/EdgeReg/'` in [vite.config.ts](vite.config.ts) — reference bundled assets through `import.meta.env.BASE_URL`, not absolute `/`. `@niivue/dcm2niix` is in `optimizeDeps.exclude` because Vite's prebundler breaks its dynamic-import WASM worker; don't remove that.
+Push to `main` builds + deploys to `gh-pages` (`.github/workflows/ghpages.yml`), served at the custom domain **https://www.edgereg.org/**. The domain is set by [public/CNAME](public/CNAME) (`www.edgereg.org`), which Vite copies into `dist/` so every force-pushed deploy re-asserts it; DNS is apex A-records → GitHub IPs plus a `www` CNAME → `rordenlab.github.io`. Because it serves at the domain **root**, `base: '/'` in [vite.config.ts](vite.config.ts) — still reference bundled assets through `import.meta.env.BASE_URL` (now `/`) so a future base change stays in one place. `@niivue/dcm2niix` is in `optimizeDeps.exclude` because Vite's prebundler breaks its dynamic-import WASM worker; don't remove that.
 
 ## Bundled assets
 

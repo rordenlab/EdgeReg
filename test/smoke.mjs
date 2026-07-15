@@ -17,7 +17,7 @@ import { dirname, join } from 'node:path'
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..')
 const PORT = 4173
-const URL = `http://localhost:${PORT}/EdgeReg/`
+const URL = `http://localhost:${PORT}/`
 
 // --- boot vite preview ---
 // detached so the child is its own process-group leader; killing -pid then reaps

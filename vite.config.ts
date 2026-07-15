@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 
-// Served as a GitHub Project Page at https://<org>.github.io/EdgeReg/, so assets
-// resolve under the /EdgeReg/ subpath (use import.meta.env.BASE_URL in code).
+// Served at the custom domain root https://www.edgereg.org/ (public/CNAME drives the
+// GitHub Pages custom domain). Assets resolve at '/', not a repo subpath. Reference
+// bundled assets via import.meta.env.BASE_URL so a base change stays in one place.
 export default defineConfig({
-  base: '/EdgeReg/',
+  base: '/',
   server: {
     open: '/index.html',
     port: 8091,
