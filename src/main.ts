@@ -48,7 +48,7 @@ const MOVING_PRESETS: Preset[] = [
     'CT_Philips.nii.gz',
     'fmri_pitch.nii.gz',
     'pcasl.nii.gz',
-    'chris_t1.nii.gz',
+    // (no chris_t1 — it is the same scan as the bundled t1_crop default)
     'chris_t2.nii.gz',
     'chris_PD.nii.gz',
     'register/T1_head.nii.gz',
