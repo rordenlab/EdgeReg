@@ -41,11 +41,11 @@ In the 3D render, the crosshair is drawn *through* the volume (a faint X-ray of 
 - **Save** (above the Resliced panel) downloads the resliced moving image as `resliced.nii.gz`; enabled once a registration has completed.
 - The status bar shows the crosshair's **world location in mm** (rounded to the nearest mm — on the MNI templates 0×0×0 is roughly the anterior commissure) and the intensity under it (both the template and resliced values when you move the crosshair in either synced panel).
 
-The Template dropdown offers three bundled templates: `MNI152_T1_1mm.nii.gz` (default), the lower-resolution SPM `avg152T1` 2 mm, and the extended `MNI152_T1_ext`. The Moving dropdown also lists sample images streamed on demand from the [niivue-demo-images](https://github.com/niivue/niivue-demo-images) repository — including several 4D scans (the vendored niimath registers their first volume automatically).
+The Template dropdown offers three bundled templates: `MNI152_T1_1mm.nii.gz` (default), the lower-resolution SPM `avg152T1` 2 mm, and the extended `MNI152_T1_ext`. The Moving dropdown also lists sample images streamed on demand from the [niivue-demo-images](https://github.com/niivue/niivue-demo-images) repository — including several 4D scans (niimath registers their first volume automatically).
 
 ## License
 
-**BSD-2-Clause.** Registration uses the BSD-2 build of niimath (the `-allineate` engine — no GPL SPM code), so the whole app is BSD-2-Clause. (The build is currently newer than the npm release, so the vendored artifacts live under [src/niimath/](src/niimath/); this goes away once niimath republishes to npm.)
+**BSD-2-Clause.** Registration uses [@niivue/niimath](https://www.npmjs.com/package/@niivue/niimath), which is BSD-2-only; NiiVue and dcm2niix are likewise permissively licensed, so the whole app is BSD-2-Clause.
 
 The MNI152_T1_ext template is the [Asymmetric ICBM 152 extended nonlinear atlas](https://nist.mni.mcgill.ca/icbm-152-extended-nonlinear-atlases-2020/)
 

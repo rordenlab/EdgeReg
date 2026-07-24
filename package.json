@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@niivue/dcm2niix": "^1.2.0",
+    "@niivue/niimath": "^1.3.3",
     "@niivue/niivue": "1.0.0-rc.9",
     "gl-matrix": "^3.4.4"
   },

@@ -22,6 +22,9 @@ export default defineConfig({
   // this is dev-mode only.) niimath is vendored as local source (src/niimath/), not a
   // dep, so it isn't prebundled and needs no exclusion — only @niivue/dcm2niix does.
   optimizeDeps: {
-    exclude: ['@niivue/dcm2niix'],
+    // Both packages construct a WASM Web Worker via `new Worker(new URL('./worker.js',
+    // import.meta.url))`; Vite's esbuild dep-prebundler can't resolve that under .vite/deps,
+    // so exclude them and let the worker + .wasm stay hashed assets (dev + build).
+    exclude: ['@niivue/dcm2niix', '@niivue/niimath'],
   },
 })

@@ -23,7 +23,7 @@ import NiiVueGPU, {
   SLICE_TYPE,
 } from '@niivue/niivue'
 import { runDcm2niix, traverseDataTransferItems } from './dcm2niix/index'
-import { Niimath } from './niimath'
+import { Niimath } from '@niivue/niimath'
 
 const BASE = import.meta.env.BASE_URL
 
@@ -276,23 +276,12 @@ async function ensureNiimath(): Promise<void> {
   await niimathReady
 }
 
-// The vendored wrapper exposes no public terminate; reach the private `worker` field.
-// Confined to one place so a dep bump has a single cast to re-verify (see AGENTS.md).
-function terminateNiimathWorker(): void {
-  try {
-    const w = niimath as unknown as { worker: Worker | null }
-    w.worker?.terminate()
-    w.worker = null
-  } catch {
-    // worker may already be gone
-  }
-}
-
 // After a failed/aborted niimath run (incl. OOM, which the WASM allocators bail on
-// via longjmp), the worker's WASM heap and MEMFS may be corrupt. Tear it down and
-// clear niimathReady so the next run spins up a fresh worker.
+// via longjmp), the worker's WASM heap and MEMFS may be corrupt. `dispose()` (public
+// in @niivue/niimath) terminates the worker and rejects any in-flight op; clearing
+// niimathReady makes the next run spin up a fresh worker via ensureNiimath().
 function resetNiimathWorker(): void {
-  terminateNiimathWorker()
+  niimath.dispose()
   niimathReady = null
 }
 
@@ -640,10 +629,10 @@ async function cleanup(): Promise<void> {
   appReady = false
   listeners.abort()
   clearDcmSelection()
-  // Terminate the niimath worker FIRST (don't await `pending`): an in-flight run is
-  // one uninterruptible WASM call. The terminated run never resolves, so we drop the
-  // await; any run that already resolved hits `if (isCleanedUp) return` before use.
-  terminateNiimathWorker()
+  // Dispose the niimath worker FIRST (don't await `pending`): dispose() terminates the
+  // worker and rejects any in-flight run() (whose enqueue .catch then no-ops under
+  // isCleanedUp), so teardown doesn't wait on an uninterruptible WASM call.
+  niimath.dispose()
   disposeViewers()
 }
 window.addEventListener('pagehide', (e) => {
